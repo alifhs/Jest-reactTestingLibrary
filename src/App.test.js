@@ -1,37 +1,33 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import React from "react";
+import axios from "axios";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Search } from "./App";
 
-const Button = ({ onClick, children }) => (
-  <button onClick={onClick}>{children}</button>
-);
+import App from "./App";
 
-// function Search({ value, onChange, children }) {
-//   return (
-//     <div>
-//       <label htmlFor="search">{children}</label>
-//       <input id="search" type="text" value={value} onChange={onChange} />
-//     </div>
-//   );
-// }
-describe('Search', () => {
-  test('calls the onChange callback handler', async () => {
-    const onChange = jest.fn();
+jest.mock("axios");
 
-    render(
-      <Search value="" onChange={onChange}>
-        Search:
-      </Search>
-    );
+describe("App", () => {
+  test("fetches stories from an API and displays them", async () => {
+    const stories = [
+      { objectID: "1", title: "Hello" },
+      { objectID: "2", title: "React" },
+    ];
 
-    // await userEvent.type(screen.getByRole('textbox'), 'JavaScript');
+    const promise = Promise.resolve({ data: { hits: stories } });
 
-    // expect(onChange).toHaveBeenCalledTimes(10);
+    axios.get.mockImplementationOnce(() => promise);
 
-    fireEvent.change(screen.getByRole('textbox'), {
-      target: { value: 'JavaScript' },
+    render(<App />);
+
+  await act(async () => {
+      await userEvent.click(screen.getByRole("button"));
     });
 
-    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
+
+  // test('fetches stories from an API and fails', async () => {
+  //   ...
+  // });
 });
