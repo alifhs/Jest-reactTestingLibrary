@@ -1,21 +1,37 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
+import { Search } from "./App";
 
-import App from "./App";
+const Button = ({ onClick, children }) => (
+  <button onClick={onClick}>{children}</button>
+);
 
-describe("App", () => {
-  test("renders App component", async () => {
-    render(<App />);
+// function Search({ value, onChange, children }) {
+//   return (
+//     <div>
+//       <label htmlFor="search">{children}</label>
+//       <input id="search" type="text" value={value} onChange={onChange} />
+//     </div>
+//   );
+// }
+describe('Search', () => {
+  test('calls the onChange callback handler', async () => {
+    const onChange = jest.fn();
 
-    await screen.findByText(/Signed in as/);
+    render(
+      <Search value="" onChange={onChange}>
+        Search:
+      </Search>
+    );
 
-    expect(screen.queryByText(/Searches for JavaScript/)).toBeNull();
+    // await userEvent.type(screen.getByRole('textbox'), 'JavaScript');
 
-    fireEvent.change(screen.getByRole("textbox"), {
-      target: { value: "JavaScript" },
+    // expect(onChange).toHaveBeenCalledTimes(10);
+
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'JavaScript' },
     });
 
-    expect(screen.getByText(/Searches for JavaScript/)).toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 });
