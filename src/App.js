@@ -1,7 +1,7 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 
-const URL = 'http://hn.algolia.com/api/v1/search';
+const URL = "http://hn.algolia.com/api/v1/search";
 
 function App() {
   const [stories, setStories] = React.useState([]);
@@ -19,11 +19,10 @@ function App() {
     }
   }
 
-
   return (
     <div>
       <button type="button" onClick={handleFetch}>
-        Fetch Stories
+        <span>Fetch Stories</span>
       </button>
 
       {error && <span>Something went wrong ...</span>}
